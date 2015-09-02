@@ -1,0 +1,12 @@
+service observium_agent
+{
+        type           = UNLISTED
+        port           = 36602
+        socket_type    = stream
+        protocol       = tcp
+        wait           = no
+        user           = root
+        server         = /usr/bin/observium_agent
+        only_from      = 127.0.0.1 $OBSERVIUM_IP
+        disable        = no
+}
