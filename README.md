@@ -1,4 +1,50 @@
 # Observium-Unbound-Graphs
 working config for Observium to graph unbound DNS queries
+###Prerequisites
+working Observium installation http://observium.org
+working Unbound installation https://unbound.net
+networking between the 2 servers
 
-###Working Config
+####Working Config (Tested on 2 CentOS 7 boxes)
+#####On Unbound Server
+install xinetd
+copy observium_agent to /etc/xinet.d/
+
+```
+mkdir -p /usr/lib/observium_agent/local/
+```
+```
+cp unbound /usr/lib/observium_agent/local/
+chmod +x /usr/lib/observium_agent/local/unbound
+```
+FROM your Observium Server ```scp /opt/observium/scripts/observium_agent user@YOUR_Unbound_Server:/usr/bin/observium_agent ```
+FROM your Observium Server (optional) ```scp /opt/observium/scripts/distro user@YOUR_Unbound_server:/usr/bin/distro ```
+```echo "extend .1.3.6.1.4.1.2021.7890.1 distro /usr/bin/distro" >> /etc/snmp/snmpd.conf```
+restart snmpd
+start xinetd
+
+Edit unbound.conf to enable stats
+
+```
+statistics-cumulative: yes
+extended-statistics: yes
+```
+restart unbound
+
+#####On Observium Server
+*This is working for me but not be the correct way
+
+```
+mkdir -p /usr/lib/observium_agent/local/
+```
+
+Sym Link unbound and observium_agent to new directory
+
+```
+ln -s /opt/observium/scripts/agent-local/unbound /usr/lib/observium_agent/local/unbound
+ln -s /opt/observium/scripts/observium_agent /usr/bin/observium_agent
+```
+
+test xinetd by using ```telnet Unbound_Server_IP 36602```
+
+
