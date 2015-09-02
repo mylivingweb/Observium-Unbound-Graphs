@@ -2,7 +2,9 @@
 working config for Observium to graph unbound DNS queries
 ###Prerequisites
 working Observium installation http://observium.org
+
 working Unbound installation https://unbound.net
+
 networking between the 2 servers
 
 ####Working Config (Tested on 2 CentOS 7 boxes)
@@ -28,8 +30,11 @@ FROM your Observium Server
 FROM your Observium Server (optional) 
 
 ```scp /opt/observium/scripts/distro user@YOUR_Unbound_server:/usr/bin/distro ```
+
 ```echo "extend .1.3.6.1.4.1.2021.7890.1 distro /usr/bin/distro" >> /etc/snmp/snmpd.conf```
+
 restart snmpd
+
 start xinetd
 
 Edit unbound.conf to enable stats
